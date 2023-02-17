@@ -44,7 +44,7 @@ After cloning the git repo:
 
 Open `prosproj_github_repo.Rproj` in RStudio.
 
-`source(etl/load_data.R)` will pull two spreadsheets from the UNC DataVerse and create one dataframe called incumbents and another for all the candidates who were not incumbents.
+`source("etl/load_data.R")` will pull two spreadsheets from the UNC DataVerse and create one dataframe called incumbents and another for all the candidates who were not incumbents.
 
 This calls `etl/competitive_seats.R`, which will create three data frames -- one for incumbents, one for non-incumbents and one combined -- that shows for each contest the number of incumbent candidates, the number of non-incumbent candidates and whether the seat is "uncontested" (an incumbent with no challengers), "contested" (at least one incumbent and one challenger), or "open" (no incumbent).
 
