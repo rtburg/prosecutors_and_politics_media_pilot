@@ -2,9 +2,7 @@
 
 Part of the the [Prosecutors and Politics Project](https://law.unc.edu/academics/centers-and-programs/prosecutors-and-politics-project/) at the [UNC School of Law](https://law.unc.edu/)
 
-Full report published at <https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf>
-
-[![](publish/report_cover.png)](https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf)
+[![Full report at <https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf>](publish/report_cover.png)](https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf)
 
 *Code and repository by Ryan Thornburg ([ryan.thornburg\@unc.edu](mailto:ryan.thornburg@unc.edu){.email})*
 
@@ -52,4 +50,4 @@ It also calls `etl/binding_incumbents_challengers.R`, which creates data frame c
 
 ## Data notes
 
-
+*Data notes TK*
