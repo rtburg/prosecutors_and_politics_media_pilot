@@ -2,7 +2,7 @@
 
 Part of the the [Prosecutors and Politics Project](https://law.unc.edu/academics/centers-and-programs/prosecutors-and-politics-project/) at the [UNC School of Law](https://law.unc.edu/)
 
-[![Full report at <https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf>](publish/report_cover.png)](https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf)
+[![Full report at \<https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf\>](publish/report_cover.png)](https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf)
 
 *Code and repository by Ryan Thornburg ([ryan.thornburg\@unc.edu](mailto:ryan.thornburg@unc.edu){.email})*
 
@@ -20,7 +20,7 @@ Part of the the [Prosecutors and Politics Project](https://law.unc.edu/academics
 
 ### Staff involved
 
-Questions about this report should be directed to the PPP director, Professor Carissa Byrne Hessick at ([chessick\@email.unc.edu](mailto:chessick@email.unc.edu){.email}).
+Questions about this report should be directed to the PPP director, Professor Carissa Byrne Hessick at [chessick\@email.unc.edu](mailto:chessick@email.unc.edu).
 
 Associate Professor Ryan Thornburg, UNC School of Journalism and Media, played a key role in research design. He also performed the data analysis and wrote portions of the report.
 
