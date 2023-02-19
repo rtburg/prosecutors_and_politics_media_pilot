@@ -2,7 +2,7 @@ pacman::p_load(tidyverse, janitor, dataverse)
 
 # Install from GitHub
 # install.packages("remotes")
-remotes::install_github("iqss/dataverse-client-r")
+# remotes::install_github("iqss/dataverse-client-r")
 library(dataverse)
 
 Sys.setenv("DATAVERSE_SERVER" = "dataverse.unc.edu")

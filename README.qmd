@@ -36,7 +36,11 @@ This report would not have been possible without the hard work of many students 
 
 ### Data source
 
-Hessick, Carissa; Thornburg, Ryan, 2023, "Pilot Study of Media Coverage for Prosecutors and Prosecutor Elections, 2020", <https://doi.org/10.15139/S3/3SWIKQ>, UNC Dataverse, V1
+See Methodology section of full report for data collection methods.
+
+Data is published in the public domain on [UNC Dataverse](https://dataverse.unc.edu/) hosted by the [Odum Institute for Research in Social Science](http://www.odum.unc.edu/). Dataverse [Community Norms](https://dataverse.org/best-practices/dataverse-community-norms "Dataverse Community Norms - Dataverse.org") as well as good scientific practices expect that proper credit is given via citation. [![](https://licensebuttons.net/p/zero/1.0/80x15.png){alt="CC0" style="border-style: none"}](http://creativecommons.org/publicdomain/zero/1.0/)
+
+Citation: *Hessick, Carissa; Thornburg, Ryan, 2023, "Pilot Study of Media Coverage for Prosecutors and Prosecutor Elections, 2020", <https://doi.org/10.15139/S3/3SWIKQ>, UNC Dataverse, V1*
 
 ## Technical
 
@@ -54,19 +58,6 @@ This calls `etl/competitive_seats.R`, which will create three data frames -- one
 
 It also calls `etl/binding_incumbents_challengers.R`, which creates data frame called `all_mentions`. This data frame includes all variables that the "incumbent" and "non-incumbent" data frames have in common.
 
-## Data notes
+## Data Analysis Notebooks
 
-```{r}
-#| label: load libraries and data
-#| code-fold: true
-#| code-summary: Load libraries and data
-#| output: false
-
-library(tidyverse)
-library(janitor)
-library(DT)
-
-source("etl/load_data.R")
-
-```
-
+Data analysis notebooks to come.
