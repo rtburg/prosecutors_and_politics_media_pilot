@@ -1,10 +1,7 @@
 ---
 title: "Media Coverage of Prosecutors and Their Elections: Results of a Pilot Study"
-author: "Ryan Thornburg"
-format: 
-  gfm:
-    toc: true
-jupyter: python3
+format: gfm
+editor: visual
 ---
 
 Part of the the [Prosecutors and Politics Project](https://law.unc.edu/academics/centers-and-programs/prosecutors-and-politics-project/) at the [UNC School of Law](https://law.unc.edu/)
@@ -59,4 +56,17 @@ It also calls `etl/binding_incumbents_challengers.R`, which creates data frame c
 
 ## Data notes
 
-*Data notes TK*
+```{r}
+#| label: load libraries and data
+#| code-fold: true
+#| code-summary: Load libraries and data
+#| output: false
+
+library(tidyverse)
+library(janitor)
+library(DT)
+
+source("etl/load_data.R")
+
+```
+
