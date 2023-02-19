@@ -111,50 +111,15 @@ the “incumbent” and “non-incumbent” data frames have in common.
 ## Data notes
 
 <details>
-<summary>Code</summary>
+<summary>Load libraries and data</summary>
 
 ``` r
 library(tidyverse)
-```
-
-</details>
-
-    ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
-    ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
-    ✔ tibble  3.1.8      ✔ dplyr   1.0.10
-    ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
-    ✔ readr   2.1.4      ✔ forcats 0.5.2 
-    ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
-    ✖ dplyr::filter() masks stats::filter()
-    ✖ dplyr::lag()    masks stats::lag()
-
-<details>
-<summary>Code</summary>
-
-``` r
+library(dataverse)
 library(janitor)
-```
-
-</details>
-
-
-    Attaching package: 'janitor'
-
-    The following objects are masked from 'package:stats':
-
-        chisq.test, fisher.test
-
-<details>
-<summary>Code</summary>
-
-``` r
 library(DT)
 
 source("etl/load_data.R")
 ```
 
 </details>
-
-    Skipping install of 'dataverse' from a github remote, the SHA1 (efdcb33e) has not changed since last install.
-      Use `force = TRUE` to force installation
-    `summarise()` has grouped output by 'state'. You can override using the `.groups` argument.`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
