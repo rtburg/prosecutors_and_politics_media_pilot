@@ -131,4 +131,5 @@ non_incumbents <- rename(non_incumbents, "candidate_name"=prosecutor_name)
 setwd("../..")
 source("etl/competitive_seats.R")
 source("etl/binding_incumbents_challengers.R")
+save.image(file="data/processed/etl.Rdata")
 
