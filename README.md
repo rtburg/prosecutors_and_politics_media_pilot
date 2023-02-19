@@ -1,16 +1,6 @@
 Media Coverage of Prosecutors and Their Elections: Results of a Pilot
 Study
 ================
-Ryan Thornburg
-
-- <a href="#project-goal" id="toc-project-goal">Project goal</a>
-- <a href="#project-notes" id="toc-project-notes">Project notes</a>
-  - <a href="#staff-involved" id="toc-staff-involved">Staff involved</a>
-  - <a href="#data-source" id="toc-data-source">Data source</a>
-- <a href="#technical" id="toc-technical">Technical</a>
-  - <a href="#project-setup-instructions"
-    id="toc-project-setup-instructions">Project setup instructions</a>
-- <a href="#data-notes" id="toc-data-notes">Data notes</a>
 
 Part of the the [Prosecutors and Politics
 Project](https://law.unc.edu/academics/centers-and-programs/prosecutors-and-politics-project/)
@@ -120,4 +110,51 @@ the “incumbent” and “non-incumbent” data frames have in common.
 
 ## Data notes
 
-*Data notes TK*
+<details>
+<summary>Code</summary>
+
+``` r
+library(tidyverse)
+```
+
+</details>
+
+    ── Attaching packages ─────────────────────────────────────── tidyverse 1.3.2 ──
+    ✔ ggplot2 3.4.0      ✔ purrr   0.3.5 
+    ✔ tibble  3.1.8      ✔ dplyr   1.0.10
+    ✔ tidyr   1.2.1      ✔ stringr 1.4.1 
+    ✔ readr   2.1.4      ✔ forcats 0.5.2 
+    ── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+    ✖ dplyr::filter() masks stats::filter()
+    ✖ dplyr::lag()    masks stats::lag()
+
+<details>
+<summary>Code</summary>
+
+``` r
+library(janitor)
+```
+
+</details>
+
+
+    Attaching package: 'janitor'
+
+    The following objects are masked from 'package:stats':
+
+        chisq.test, fisher.test
+
+<details>
+<summary>Code</summary>
+
+``` r
+library(DT)
+
+source("etl/load_data.R")
+```
+
+</details>
+
+    Skipping install of 'dataverse' from a github remote, the SHA1 (efdcb33e) has not changed since last install.
+      Use `force = TRUE` to force installation
+    `summarise()` has grouped output by 'state'. You can override using the `.groups` argument.`summarise()` has grouped output by 'state'. You can override using the `.groups` argument.
