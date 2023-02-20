@@ -61,3 +61,4 @@ It also calls `etl/binding_incumbents_challengers.R`, which creates data frame c
 ## Data Analysis Notebooks
 
 -   [Executive Summary](https://rtburg.github.io/prosecutors_and_politics_media_pilot/)
+-   [Amount of Coverage](https://rtburg.github.io/prosecutors_and_politics_media_pilot/coverage_amount.html)

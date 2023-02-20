@@ -1,6 +1,21 @@
 project:
   type: website
-  output-dir: ../../docs
-  render:
+
+website:
+  title: "Media Coverage of Prosecutors and Their Elections: Results of a Pilot Study"
+  sidebar:
+    style: "floating"
+    search: true
+    contents:
+      - index.qmd
+      - coverage_amount.qmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+
+output-dir: ../../docs
+render:
     - "*.qmd"
     - "!scratch/"
