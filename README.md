@@ -125,4 +125,4 @@ the “incumbent” and “non-incumbent” data frames have in common.
 ## Data Analysis Notebooks
 
 - [Executive
-  Summary](https://github.com/rtburg/prosecutors_and_politics_media_pilot/)
+  Summary](https://rtburg.github.io/prosecutors_and_politics_media_pilot/)
