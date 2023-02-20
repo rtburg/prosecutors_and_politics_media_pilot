@@ -7,18 +7,16 @@ library(dataverse)
 
 Sys.setenv("DATAVERSE_SERVER" = "dataverse.unc.edu")
 
-setwd("data/source")
 
-download.file("https://dataverse.unc.edu/api/access/datafile/7526756", destfile = "incumbents_data.xlsx")
 
-incumbents<- readxl::read_xlsx("incumbents_data.xlsx")
+download.file("https://dataverse.unc.edu/api/access/datafile/7526756", destfile  = here::here("data","source","incumbents_data.xlsx"))
 
-download.file("https://dataverse.unc.edu/api/access/datafile/7526756", destfile = "non_incumbents_data.xlsx")
+incumbents<- readxl::read_xlsx(here::here("data","source","incumbents_data.xlsx"))
 
-non_incumbents<- readxl::read_xlsx("non_incumbents_data.xlsx")
+download.file("https://dataverse.unc.edu/api/access/datafile/7526755", destfile = here::here("data","source","non_incumbents_data.xlsx"))
 
-#CAN REMOVE NEXT LINE IF VARIABLE NAME IS CORRECTED ON DATAVERSE
-non_incumbents <- rename(non_incumbents, "candidate_name"=prosecutor_name)
+non_incumbents<- readxl::read_xlsx(here::here("data","source","non_incumbents_data.xlsx"))
+
 
 
 # USED TO CREATE THE DATAVERSE XLSX FILES FROM MULTIPLE SPREADSHEETS. NO LONGER NEEDED.
@@ -105,9 +103,9 @@ non_incumbents <- rename(non_incumbents, "candidate_name"=prosecutor_name)
 # incumbents <- clean_names(incumbents)
 #
 #
-# devinney <- c(NA, "Devinney", rep(NA,18),"KS","Butler",NA)
-#
-# incumbents<- rbind(incumbents, devinney)
+#NEXT LINES BECAUSE DEVINNEY HAD NO STORIES
+#devinney <- c(NA, "Devinney", rep(NA,18),"KS","Butler",NA)
+#incumbents<- rbind(incumbents, devinney)
 
 # JOIN AND CLEAN UP NON-INCUMBENTS DF
 #
@@ -119,17 +117,14 @@ non_incumbents <- rename(non_incumbents, "candidate_name"=prosecutor_name)
 #
 # }
 
+#Removing articles not in 2020
+incumbents<- incumbents %>% filter(lubridate::year(date_of_article) == 2020 | #need next line for devinney
+is.na(date_of_article))
 
-# REMOVED ARTICLES NOT IN 2020
-# incumbents<- incumbents %>% filter(lubridate::year(date_of_article) == 2020 |
-#                                      #need next line for devinney
-#                                      is.na(date_of_article))
-#
-#
-# non_incumbents<- non_incumbents %>% filter(lubridate::year(date_of_article) == 2020)
+non_incumbents<- non_incumbents %>% filter(lubridate::year(date_of_article) == 2020)
 
-setwd("../..")
-source("etl/competitive_seats.R")
-source("etl/binding_incumbents_challengers.R")
-save.image(file="data/processed/etl.Rdata")
+source(here::here("etl","competitive_seats.R"))
+source(here::here("etl", "binding_incumbents_challengers.R"))
+
+save.image(file=here::here("data","processed/etl.Rdata"))
 

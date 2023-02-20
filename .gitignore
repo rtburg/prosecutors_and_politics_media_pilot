@@ -4,9 +4,14 @@
 scratch/*
 !scratch/.gitkeep
 
+data/processed/*
+!data/processed/.gitkeep
+
 packrat/lib*/
 packrat/src/
 
 .Rproj.user
 .RData
 .Rhistory
+
+/.quarto/

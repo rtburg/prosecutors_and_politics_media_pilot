@@ -44,7 +44,7 @@ Citation: *Hessick, Carissa; Thornburg, Ryan, 2023, "Pilot Study of Media Covera
 
 ## Technical
 
-This project skeleton was built using [AP DataKit](http://datakit.ap.org/)
+This project skeleton was built using [AP DataKit](http://datakit.ap.org/) and is based on the [AP R Cookiecutter project template](https://github.com/associatedpress/cookiecutter-r-project).
 
 ### Project setup instructions
 
@@ -60,4 +60,4 @@ It also calls `etl/binding_incumbents_challengers.R`, which creates data frame c
 
 ## Data Analysis Notebooks
 
-Data analysis notebooks to come.
+-   [Executive Summary](https://github.com/rtburg/prosecutors_and_politics_media_pilot/)
