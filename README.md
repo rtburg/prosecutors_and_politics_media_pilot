@@ -97,7 +97,9 @@ Media Coverage for Prosecutors and Prosecutor Elections, 2020”,
 ## Technical
 
 This project skeleton was built using [AP
-DataKit](http://datakit.ap.org/)
+DataKit](http://datakit.ap.org/) and is based on the [AP R Cookiecutter
+project
+template](https://github.com/associatedpress/cookiecutter-r-project).
 
 ### Project setup instructions
 
@@ -122,4 +124,5 @@ the “incumbent” and “non-incumbent” data frames have in common.
 
 ## Data Analysis Notebooks
 
-Data analysis notebooks to come.
+- [Executive
+  Summary](https://github.com/rtburg/prosecutors_and_politics_media_pilot/)
