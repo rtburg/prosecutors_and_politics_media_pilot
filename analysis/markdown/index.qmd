@@ -29,7 +29,10 @@ all_mentions %>%
     contest == "Butler" ~ 0,
     TRUE ~ as.numeric(mentions))
     ) %>%
-  datatable()
+  datatable(options = list(dom='t',
+                         pageLength = 27),
+            colnames = c('State', 'Contest', 'Mentions'),
+          rownames = FALSE)
 ```
 
 ## How many articles did we code?
@@ -89,6 +92,7 @@ combined_unique_articles %>%
 
 ```{r}
 #| code-fold: true
+#| message: false
 articles_per_prosecutor<- incumbents %>% 
   filter(duplicative_publication_of_previous_article == "0" |
            #Next line because of Devinney had no articles
@@ -159,6 +163,7 @@ datatable(articles_per_prosecutor,
 
 ```{r}
 #| code-fold: true
+#| message: false
 
 articles_per_ninc<- non_incumbents %>% 
   filter(duplicative_publication_of_previous_article == "0") %>%
