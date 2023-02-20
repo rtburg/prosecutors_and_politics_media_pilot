@@ -1,5 +1,9 @@
 project:
   type: website
+  output-dir: ../../docs
+  render:
+    - "*.qmd"
+    - "!scratch/"
 
 website:
   title: "Media Coverage of Prosecutors and Their Elections: Results of a Pilot Study"
@@ -12,10 +16,6 @@ website:
 
 format:
   html:
-    theme: cosmo
     toc: true
 
-output-dir: ../../docs
-render:
-    - "*.qmd"
-    - "!scratch/"
+
