@@ -1,9 +1,16 @@
 ---
 title: "Executive Summary"
-author: "Ryan Thornburg"
 format: html
 editor: visual
 ---
+
+<!--# Timestamp: leave this in to automatically track when a file is rendered -->
+
+*Rendered at `r format(Sys.time(), '%I:%M %p, %b. %d, %Y')`*
+
+<!--# Contact info: leave author/reporter/editor contact info here -->
+
+*Ryan Thornburg ([ryan.thornburg\@unc.edu](mailto:ryan.thornburg@unc.edu){.email})*
 
 ```{r}
 #| label: setup
@@ -102,5 +109,13 @@ competitiveness %>%
                          pageLength = 27),
             colnames = c('State', 'Contest', 'Competitiveness', 'Incumbents', 'Challengers'),
           rownames = FALSE) 
+
+```
+
+```{r}
+#| code-fold: true
+#| include: false
+
+save.image(here("data","processed","index.RData"))
 
 ```

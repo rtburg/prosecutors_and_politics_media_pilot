@@ -13,6 +13,7 @@ website:
     contents:
       - index.qmd
       - coverage_amount.qmd
+      - coverage_content.qmd
 
 format:
   html:

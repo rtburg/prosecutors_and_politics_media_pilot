@@ -1,0 +1,370 @@
+---
+title: "Content of Coverage"
+format: html
+editor: visual
+---
+
+<!--# Timestamp: leave this in to automatically track when a file is rendered -->
+
+*Rendered at `r format(Sys.time(), '%I:%M %p, %b. %d, %Y')`*
+
+<!--# Contact info: leave author/reporter/editor contact info here -->
+
+*Ryan Thornburg ([ryan.thornburg\@unc.edu](mailto:ryan.thornburg@unc.edu){.email})*
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+library(here)
+library(DT)
+library(janitor)
+library(plotly)
+
+load(here("data","processed","index.RData"))
+```
+
+## Depth of Mention for Incumbents
+
+1 = Mention in passing (1 mention)
+
+2 = Mention and includes some detail/discussion (2-3 mentions)
+
+3 = In depth detail/discussion (more than 3 mentions or significant discussion of office/policy)
+
+```{r}
+#| code-fold: true
+#| message: false
+
+
+inc_unique_articles %>% 
+  filter(type_of_prosecutor_mention %in% c("1","2","3")) %>%
+  group_by(type_of_prosecutor_mention) %>%
+  summarize (articles=n()) %>%
+  mutate(percentage = scales::percent(articles / sum(articles)))
+
+```
+
+## Depth of Mention for Non-incumbents
+
+```{r}
+#| code-fold: true
+
+
+ninc_unique_articles %>% 
+  filter(type_of_candidate_mention %in% c("1","2","3")) %>%
+  group_by(type_of_candidate_mention) %>%
+  summarize (articles=n()) %>%
+  mutate(percentage = scales::percent(articles / sum(articles))) 
+```
+
+## Focus of Incumbents' Coverage
+
+0 = neither is mentioned
+
+1 = case-specific/particular prosecutor decision mentioned (describe in notes)
+
+2 = general/office-wide prosecutor policy mentioned (describe in notes)
+
+*Note that we accepted multiple values for each article. So we have a total of 1,698 focuses for the 1,646 articles that mention an incumbent prosecutor.*
+
+```{r}
+#| code-fold: true
+
+inc_unique_articles %>%
+  mutate(code_1 = case_when(str_detect(primary_focus_of_article,"1") ~ 1,
+                            TRUE ~ 0),
+         code_2 = case_when(str_detect(primary_focus_of_article,"2") ~ 1,
+                            TRUE ~ 0),
+         code_3 = case_when(str_detect(primary_focus_of_article,"3") ~ 1,
+                            TRUE ~ 0),
+         code_4 = case_when(str_detect(primary_focus_of_article,"4") ~ 1,
+                            TRUE ~ 0),
+         code_5 = case_when(str_detect(primary_focus_of_article,"5") ~ 1,
+                            TRUE ~ 0),
+         code_99 = case_when(str_detect(primary_focus_of_article,"99") ~ 1,
+#NOTE: We had one article coded "0", which was not a valid code                             
+                             str_detect(primary_focus_of_article,"0") ~ 1,
+                             TRUE ~ 0),
+         ) %>% 
+select(2,1, starts_with(c("primary","code_"))) %>%
+  select(1,2,starts_with("code_")) %>%
+  summarize(across(starts_with("code_"),sum)) %>%
+  rename(specific_crime_case = code_1,
+         category_crimes_cases = code_2,
+         prosecutor = code_3,
+         election = code_4,
+         justice_system_general = code_5,
+         other = code_99) %>%
+  pivot_longer(1:6, names_to = "primary_focus", values_to = "articles") %>% 
+  arrange(desc(articles)) %>%
+  adorn_percentages("col") %>%
+  adorn_pct_formatting() %>%
+  datatable(options = list(dom='t'),
+            colnames = c('Focus', '% of Mentions'),
+          rownames = FALSE)
+```
+
+## Types of Crimes Discussed
+
+A single article can discuss multiple types of crimes, so this shows the number of time each crime is mentioned. Use 1,646 articles as the denominator to determine the percentage of articles that discuss a certain crime.
+
+```{r}
+#| code-fold: true
+
+inc_unique_articles %>%
+  mutate(
+    code_0 = case_when(str_detect(type_of_crime_discussed,"^0") ~ TRUE),
+    code_1 = case_when(str_detect(type_of_crime_discussed,"^1$|^1[:punct:]|\\s1[:punct:]|[:punct:]1[:punct:]|\\s1$|[:punct:]1$") ~ TRUE),
+    code_2 = case_when(str_detect(type_of_crime_discussed,"^2$|^2[:punct:]|\\s2[:punct:]|[:punct:]2[:punct:]|\\s2$|[:punct:]2$") ~ TRUE),
+    code_3 = case_when(str_detect(type_of_crime_discussed,"^3$|^3[:punct:]|\\s3[:punct:]|[:punct:]3[:punct:]|\\s3$|[:punct:]3$") ~ TRUE),
+    code_4 = case_when(str_detect(type_of_crime_discussed,"^4$|^4[:punct:]|\\s4[:punct:]|[:punct:]4[:punct:]|\\s4$|[:punct:]4$") ~ TRUE),
+    code_5 = case_when(str_detect(type_of_crime_discussed,"5") ~ TRUE),
+    code_6 = case_when(str_detect(type_of_crime_discussed,"6") ~ TRUE),
+    code_7 = case_when(str_detect(type_of_crime_discussed,"7") ~ TRUE),
+    code_8 = case_when(str_detect(type_of_crime_discussed,"8") ~ TRUE),
+    code_9 = case_when(str_detect(type_of_crime_discussed,"^9$|^9[:punct:]|\\s9[:punct:]|[:punct:]9[:punct:]|\\s9$|[:punct:]9$") ~ TRUE),
+    code_10 = case_when(str_detect(type_of_crime_discussed,"10") ~ TRUE),
+    code_11 = case_when(str_detect(type_of_crime_discussed,"11") ~ TRUE),
+    code_12 = case_when(str_detect(type_of_crime_discussed,"12") ~ TRUE),
+    code_13 = case_when(str_detect(type_of_crime_discussed,"13") ~ TRUE),
+    code_14 = case_when(str_detect(type_of_crime_discussed,"14") ~ TRUE),
+    code_99 = case_when(str_detect(type_of_crime_discussed,"99") ~ TRUE)
+  ) %>% 
+  select(state, contest, prosecutor_name, news_story_number, type_of_crime_discussed, starts_with("code")) %>% 
+  rename(
+    "None" = "code_0",
+    "Homicide" = "code_1",
+    "Robbery" = "code_2",
+    "Rape/Sexual Assault"= "code_3",
+    "Arson"= "code_4",
+    "Burglary"= "code_5",
+    "Kidnapping"= "code_6",
+    "Theft/looting"= "code_7",
+    "Drunk driving"= "code_8",
+    "Domestic violence"= "code_9",
+    "Drug crimes"= "code_10",
+    "Shootings/gun crimes"= "code_11",
+    "Violent crime, broadly"= "code_12",
+    "Nonviolent crime, broadly"= "code_13",
+    "Property crime, broadly"= "code_14",
+    "Other"= "code_99"
+  ) %>%
+  pivot_longer(!c(state, contest, prosecutor_name, news_story_number, type_of_crime_discussed),
+               names_to = "code",
+               values_to = "exists") %>%
+  tabyl(code,exists) %>%
+  select(code, `TRUE`) %>% 
+  rename(c(crime= code, mentions = `TRUE`)) %>%
+  arrange(-mentions) %>%
+  datatable(options = list(dom='t'),
+            colnames = c('Crime', 'Total Mentions'),
+          rownames = FALSE)
+
+```
+
+## Crime Rates
+
+0 = Not mentioned
+
+1 = Mentioned about increasing rate
+
+2 = Mentioned about decreasing rate
+
+3 = Mentions both increases and decreases
+
+```{r}
+#| code-fold: true
+
+inc_unique_articles['discussion_of_crime_rates'][inc_unique_articles['discussion_of_crime_rates'] == "0"] <- "No Mention"
+
+inc_unique_articles['discussion_of_crime_rates'][inc_unique_articles['discussion_of_crime_rates'] == "1"] <- "Increasing"
+
+inc_unique_articles['discussion_of_crime_rates'][inc_unique_articles['discussion_of_crime_rates'] == "2"] <- "Decreasing"
+
+inc_unique_articles['discussion_of_crime_rates'][inc_unique_articles['discussion_of_crime_rates'] == "3"] <- "Both"
+
+   inc_unique_articles %>%
+     group_by(discussion_of_crime_rates) %>%
+     summarize(articles=n()) %>%
+     mutate(pct = scales::percent(articles / sum(articles))) %>%
+     arrange(-articles) %>%
+     datatable(options = list(dom='t'),
+               colnames = c('Code', 'Articles', '% of Articles'),
+               rownames = FALSE)
+     
+```
+
+## Tone of Crime Rate Coverage
+
+0 = neutral
+
+1 = expressing concern
+
+2 = reassuring
+
+3 = includes both expressions of concern and reassurance
+
+99 = not applicable
+
+*Note: Omits four articles with invalid codes for tone of coverage.*
+
+```{r}
+#| echo: false
+
+inc_unique_articles %>%
+  filter(!tenor_tone_of_article_re_crime_or_crime_rates %in% c("0","1","2","3","99"))
+
+```
+
+```{r}
+#| code-fold: true
+
+
+inc_unique_articles %>%
+  filter(tenor_tone_of_article_re_crime_or_crime_rates %in% c("0","1","2","3","99")) %>%
+  tabyl(discussion_of_crime_rates
+    ,tenor_tone_of_article_re_crime_or_crime_rates)%>%
+       datatable(options = list(dom='t'),
+               colnames = c('', 'Neutral','Concern','Reassuring', 'Both','NA'),
+               rownames = FALSE)
+  
+```
+
+## Mention of Election
+
+0 = not mentioned at all
+
+1 = mentioned in passing
+
+2 = mentioned with limited discussion
+
+3 = mentioned with discussion of platforms/policies
+
+```{r}
+#| code-fold: true
+
+inc_unique_articles %>%
+#exclude 10 articles with invalid coding
+  filter(election_referenced_in_article != "99") %>%
+ tabyl(election_referenced_in_article) %>%
+  adorn_pct_formatting() %>%
+       datatable(options = list(dom='t'),
+               colnames = c('Code', 'Articles','Percent'),
+               rownames = FALSE)
+```
+
+### Coverage by Competitiveness
+
+```{r}
+#| code-fold: true
+
+competitiveness %>%
+    filter(type != "open") %>%
+  left_join(inc_unique_articles, by = c("state", "contest")) %>%
+#exclude 11 articles with invalid coding 
+    filter(election_referenced_in_article != "99", !is.na(election_referenced_in_article)) %>%  
+ tabyl(election_referenced_in_article) %>%
+  adorn_pct_formatting() %>%
+       datatable(options = list(dom='t'),
+               colnames = c('Competitiveness', 'Articles','Percent'),
+               rownames = FALSE)
+```
+
+## 
+
+## Winning Incumbent; No Coverage
+
+"One candidate (A. Felton, Polk County, OR) was mentioned in\
+eight separate articles, none of which mentioned that he was up for reelection;\
+he ran unopposed and won." [*See Full Report*](https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf)
+
+```{r}
+#| code-fold: true
+
+inc_unique_articles%>%
+  #exclude 11 articles with invalid coding 
+    filter(election_referenced_in_article != "99", !is.na(election_referenced_in_article)) %>%
+  tabyl(prosecutor_name, election_referenced_in_article) %>%
+       datatable(options = list(dom='t',
+                                pageLength = 27,
+                                order = list(list(4, 'asc'),
+                                             list(3,'asc'),
+                                             list(2, 'asc'))
+                                ),
+               colnames = c('Prosecutor', 'No Election Mention','Passing Mention','Limited Discussion','In Depth'),
+               rownames = FALSE)
+
+```
+
+## Mentions of Decisions or Policies of Incumbents
+
+0 = neither is mentioned
+
+1 = case-specific/particular prosecutor decision mentioned (describe in notes)
+
+2 = general/office-wide prosecutor policy mentioned (describe in notes)
+
+*NOTE: This table looks only at prosecutors running for re-election.*
+
+```{r}
+#| code-fold: true
+
+inc_unique_articles %>%
+  left_join(competitiveness, by=c("state", "contest")) %>%
+  filter(type !="open") %>%
+  mutate(discussion_of_prosecutorial_decision_or_policy = 
+           case_when(discussion_of_prosecutorial_decision_or_policy == "0" ~ "neither",
+                     str_detect(discussion_of_prosecutorial_decision_or_policy,";") ~ "both",
+         str_detect(discussion_of_prosecutorial_decision_or_policy,"1") ~ "decision",
+         str_detect(discussion_of_prosecutorial_decision_or_policy,"2") ~ "policy",
+         str_detect(discussion_of_prosecutorial_decision_or_policy,"General policy") ~ "policy"
+         
+)
+) %>%
+  select(discussion_of_prosecutorial_decision_or_policy) %>%
+  tabyl(discussion_of_prosecutorial_decision_or_policy)  %>% adorn_pct_formatting() %>%
+  datatable(options = list(dom='t',
+                                order =  list(2, 'desc')
+                                ),
+               colnames = c('', 'Articles','% Articles'),
+               rownames = FALSE)
+
+
+```
+
+## Mentions of Background or Platforms of Non-Incumbents
+
+```{r}
+#| code-fold: true
+#| message: false
+
+non_incumbents %>%
+    filter(duplicative_publication_of_previous_article == "0") %>%
+  group_by(candidate_name, candidate_background_or_platform) %>%
+  summarize(articles = n()) %>%
+  mutate(candidate_background_or_platform = case_when(
+    candidate_background_or_platform == "0" ~ "neither",
+    candidate_background_or_platform == "1" ~ "background_only",
+    candidate_background_or_platform == "2" ~ "platform_only",
+    candidate_background_or_platform == "3" ~ "both")) %>%
+  pivot_wider(names_from = candidate_background_or_platform, values_from = articles) %>%
+   replace_na(list(neither = 0,
+                   platform_only = 0,
+                   background_only = 0,
+                   both = 0
+   )
+   ) %>%
+  adorn_percentages() %>%
+  arrange(desc(neither)) %>%
+  adorn_pct_formatting() %>%
+  datatable(
+            options(list(dom='t',
+                         pageLength = 21)),
+               colnames = c('Candidate',
+                            'Neither',
+                            'Platform',
+                            'Background',
+                            'Both'),
+               rownames = FALSE)
+```
