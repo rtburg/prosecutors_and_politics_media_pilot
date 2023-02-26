@@ -12,6 +12,10 @@ editor: visual
 
 *Ryan Thornburg ([ryan.thornburg\@unc.edu](mailto:ryan.thornburg@unc.edu){.email})*
 
+This analysis accompanies the [full report](https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf) by Carissa Byrne Hessick and Amy Ullrick as part of the the [Prosecutors and Politics Project](https://law.unc.edu/academics/centers-and-programs/prosecutors-and-politics-project/) at the [UNC School of Law](https://law.unc.edu/).
+
+Code for loading the data as well as additional information about the code and data is available on [GitHub](https://github.com/rtburg/prosecutors_and_politics_media_pilot).
+
 ```{r}
 #| label: setup
 #| include: false
@@ -24,7 +28,7 @@ library(plotly)
 source(here("etl","load_data.R"))
 ```
 
-## Which state and contests did we cover?
+## Which states and contests did we cover?
 
 ```{r}
 #| message: false

@@ -32,7 +32,7 @@
     "href": "index.html",
     "title": "Executive Summary",
     "section": "",
-    "text": "Rendered at 06:35 PM, Feb. 21, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+    "text": "Rendered at 12:19 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)\nThis analysis accompanies the full report by Carissa Byrne Hessick and Amy Ullrick as part of the the Prosecutors and Politics Project at the UNC School of Law.\nCode for loading the data as well as additional information about the code and data is available on GitHub."
   },
   {
     "objectID": "index.html#how-many-articles-did-we-code",
@@ -145,5 +145,47 @@
     "title": "Content of Coverage",
     "section": "Mentions of Background or Platforms of Non-Incumbents",
     "text": "Mentions of Background or Platforms of Non-Incumbents\n\n\nCode\nnon_incumbents %>%\n    filter(duplicative_publication_of_previous_article == \"0\") %>%\n  group_by(candidate_name, candidate_background_or_platform) %>%\n  summarize(articles = n()) %>%\n  mutate(candidate_background_or_platform = case_when(\n    candidate_background_or_platform == \"0\" ~ \"neither\",\n    candidate_background_or_platform == \"1\" ~ \"background_only\",\n    candidate_background_or_platform == \"2\" ~ \"platform_only\",\n    candidate_background_or_platform == \"3\" ~ \"both\")) %>%\n  pivot_wider(names_from = candidate_background_or_platform, values_from = articles) %>%\n   replace_na(list(neither = 0,\n                   platform_only = 0,\n                   background_only = 0,\n                   both = 0\n   )\n   ) %>%\n  adorn_percentages() %>%\n  arrange(desc(neither)) %>%\n  adorn_pct_formatting() %>%\n  datatable(\n            options(list(dom='t',\n                         pageLength = 21)),\n               colnames = c('Candidate',\n                            'Neither',\n                            'Platform',\n                            'Background',\n                            'Both'),\n               rownames = FALSE)"
+  },
+  {
+    "objectID": "index.html#which-states-and-contests-did-we-cover",
+    "href": "index.html#which-states-and-contests-did-we-cover",
+    "title": "Executive Summary",
+    "section": "Which states and contests did we cover?",
+    "text": "Which states and contests did we cover?\n\n\nCode\nall_mentions %>% \n  group_by(state, contest) %>%\n  summarize(mentions=n())  %>% \n  mutate(mentions = case_when(\n    contest == \"Butler\" ~ 0,\n    TRUE ~ as.numeric(mentions))\n    ) %>%\n  datatable(options = list(dom='t',\n                         pageLength = 27),\n            colnames = c('State', 'Contest', 'Mentions'),\n          rownames = FALSE)"
+  },
+  {
+    "objectID": "coverage_tone.html",
+    "href": "coverage_tone.html",
+    "title": "Tone of Coverage",
+    "section": "",
+    "text": "Rendered at 12:03 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+  },
+  {
+    "objectID": "coverage_tone.html#overall-most-media-coverage-was-neutral.",
+    "href": "coverage_tone.html#overall-most-media-coverage-was-neutral.",
+    "title": "Tone of Coverage",
+    "section": "Overall, most media coverage was neutral.",
+    "text": "Overall, most media coverage was neutral.\n0 = neutral\n1 = positive\n2 = negative\n3 = includes both positive and negative\n\n\nCode\nall_mentions %>% \n  select(2:5, 1, tenor_tone_of_article_re_candidate) %>%\n  filter(!is.na(tenor_tone_of_article_re_candidate)) %>%\n  #filter(tenor_tone_of_article_re_candidate %in% c(\"0\",\"1\",\"2\")) %>%\n  tabyl(tenor_tone_of_article_re_candidate) %>%\n  adorn_pct_formatting() %>%\n  datatable(options = list(dom='t'),\n          colnames = c('Tone', 'Articles', 'Percent'),\n        rownames = FALSE)"
+  },
+  {
+    "objectID": "coverage_tone.html#article-tone-by-incumbents-vs.-challengers",
+    "href": "coverage_tone.html#article-tone-by-incumbents-vs.-challengers",
+    "title": "Tone of Coverage",
+    "section": "Article Tone by Incumbents vs. Challengers",
+    "text": "Article Tone by Incumbents vs. Challengers\n\n\nCode\nall_mentions %>%\n  select(2:5, 1, tenor_tone_of_article_re_candidate) %>%\n  filter(!is.na(tenor_tone_of_article_re_candidate)) %>%\n  #filter(tenor_tone_of_article_re_candidate %in% c(\"0\",\"1\",\"2\")) %>%\n  group_by(tenor_tone_of_article_re_candidate, candidate_status) %>%\n  summarize(Articles=n()) %>%\n  pivot_wider(names_from = \"candidate_status\", values_from = Articles) %>%\n  adorn_percentages(denominator = 'col') %>%\n  adorn_pct_formatting() %>%\n  datatable(options = list(dom='t'),\n          colnames = c('Tone', 'Challengers', 'Incumbents'),\n        rownames = FALSE)"
+  },
+  {
+    "objectID": "coverage_tone.html#article-tone-for-each-candidate",
+    "href": "coverage_tone.html#article-tone-for-each-candidate",
+    "title": "Tone of Coverage",
+    "section": "Article Tone for Each Candidate",
+    "text": "Article Tone for Each Candidate\nFor this, I re-coded invalid codes as “both positive and negative.” Devinney is not included in this table because the candidate received no article mentions.\n\n\nCode\nall_tone<- all_mentions %>%\n  select(2:5, 1, tenor_tone_of_article_re_candidate) %>%\n  mutate(tenor_tone_of_article_re_candidate = \n           case_when(\n             str_detect(tenor_tone_of_article_re_candidate,\"0; 1; 2\") ~ \"3\",\n            str_detect(tenor_tone_of_article_re_candidate,\"3\") ~ \"3\",\n            str_detect(tenor_tone_of_article_re_candidate,\"1\") ~ \"1\",\n            str_detect(tenor_tone_of_article_re_candidate,\"2\") ~ \"2\",\n            str_detect(tenor_tone_of_article_re_candidate,\"0\") ~ \"0\"\n                     )) %>%\n  filter(!is.na(tenor_tone_of_article_re_candidate)) %>%\n           group_by(state, contest, candidate_name, candidate_status,\n                    tenor_tone_of_article_re_candidate) %>%\n            summarize(Articles =n()) %>%\n  pivot_wider(names_from = tenor_tone_of_article_re_candidate,\n              names_prefix = \"code_\",\n              names_sort = TRUE,\n              values_from = Articles) %>%\n  mutate_if(is.numeric, replace_na, 0)\n\nall_tone %>% \n  datatable(\n          colnames = c('State', 'Contest', 'Canddiate', 'Status', 'Neutral Articles', 'Mostly Positive', 'Mostly Negative', 'Both'),\n        rownames = FALSE)"
+  },
+  {
+    "objectID": "coverage_tone.html#candidates-who-received-the-most-negative-coverage.",
+    "href": "coverage_tone.html#candidates-who-received-the-most-negative-coverage.",
+    "title": "Tone of Coverage",
+    "section": "Candidates who received the most negative coverage.",
+    "text": "Candidates who received the most negative coverage.\n\n\nCode\nall_tone %>%\n    left_join(competitiveness, b = c(\"state\", \"contest\")) %>%\n  select(3:4,type,contains(\"code\"), 1:2) %>%\n    adorn_percentages(denominator = 'row') %>%\n  filter(code_2 > .05) %>%\n  arrange(desc(code_2) ) %>%\n  adorn_pct_formatting() %>%\n    datatable(list(pageLength = 16),\n          colnames = c('Candidate', 'Cand. Status', 'Compete Type', 'Neutral Articles', 'Mostly Positive', 'Mostly Negative', 'Both', 'State', 'Contest'),\n        rownames = FALSE)"
   }
 ]

@@ -7,6 +7,9 @@ project:
 
 website:
   title: "Media Coverage of Prosecutors and Their Elections: Results of a Pilot Study"
+  page-footer: "Copyright 2023, Ryan Thornburg"
+  repo-url: https://github.com/rtburg/prosecutors_and_politics_media_pilot/
+  repo-actions: [issue]
   sidebar:
     style: "floating"
     search: true
@@ -14,6 +17,17 @@ website:
       - index.qmd
       - coverage_amount.qmd
       - coverage_content.qmd
+      - coverage_tone.qmd
+      - text: Full Report
+        url:  https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf
+      - text: Source Code
+        url:  https://github.com/rtburg/prosecutors_and_politics_media_pilot
+
+    tools:
+    - icon: github
+      menu:
+        - text: Source Code
+          url:  https://github.com/rtburg/prosecutors_and_politics_media_pilot
 
 format:
   html:

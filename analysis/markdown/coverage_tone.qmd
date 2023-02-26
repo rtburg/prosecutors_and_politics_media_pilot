@@ -1,0 +1,127 @@
+---
+title: "Tone of Coverage"
+format: html
+editor: visual
+---
+
+<!--# Timestamp: leave this in to automatically track when a file is rendered -->
+
+*Rendered at `r format(Sys.time(), '%I:%M %p, %b. %d, %Y')`*
+
+<!--# Contact info: leave author/reporter/editor contact info here -->
+
+*Ryan Thornburg ([ryan.thornburg\@unc.edu](mailto:ryan.thornburg@unc.edu){.email})*
+
+```{r}
+#| label: setup
+#| include: false
+library(tidyverse)
+library(here)
+library(DT)
+library(janitor)
+library(plotly)
+
+load(here("data","processed","index.RData"))
+```
+
+## **Overall, most media coverage was neutral.**
+
+0 = neutral
+
+1 = positive
+
+2 = negative
+
+3 = includes both positive and negative
+
+```{r}
+#| message: false
+#| code-fold: true
+
+all_mentions %>% 
+  select(2:5, 1, tenor_tone_of_article_re_candidate) %>%
+  filter(!is.na(tenor_tone_of_article_re_candidate)) %>%
+  #filter(tenor_tone_of_article_re_candidate %in% c("0","1","2")) %>%
+  tabyl(tenor_tone_of_article_re_candidate) %>%
+  adorn_pct_formatting() %>%
+  datatable(options = list(dom='t'),
+          colnames = c('Tone', 'Articles', 'Percent'),
+        rownames = FALSE)
+```
+
+## Article Tone by Incumbents vs. Challengers
+
+```{r}
+#| message: false
+#| code-fold: true
+
+all_mentions %>%
+  select(2:5, 1, tenor_tone_of_article_re_candidate) %>%
+  filter(!is.na(tenor_tone_of_article_re_candidate)) %>%
+  #filter(tenor_tone_of_article_re_candidate %in% c("0","1","2")) %>%
+  group_by(tenor_tone_of_article_re_candidate, candidate_status) %>%
+  summarize(Articles=n()) %>%
+  pivot_wider(names_from = "candidate_status", values_from = Articles) %>%
+  adorn_percentages(denominator = 'col') %>%
+  adorn_pct_formatting() %>%
+  datatable(options = list(dom='t'),
+          colnames = c('Tone', 'Challengers', 'Incumbents'),
+        rownames = FALSE)
+
+```
+
+## Article Tone for Each Candidate
+
+*For this, I re-coded invalid codes as "both positive and negative." Devinney is not included in this table because the candidate received no article mentions.*
+
+```{r}
+#| message: false
+#| code-fold: true
+
+all_tone<- all_mentions %>%
+  select(2:5, 1, tenor_tone_of_article_re_candidate) %>%
+  mutate(tenor_tone_of_article_re_candidate = 
+           case_when(
+             str_detect(tenor_tone_of_article_re_candidate,"0; 1; 2") ~ "3",
+            str_detect(tenor_tone_of_article_re_candidate,"3") ~ "3",
+            str_detect(tenor_tone_of_article_re_candidate,"1") ~ "1",
+            str_detect(tenor_tone_of_article_re_candidate,"2") ~ "2",
+            str_detect(tenor_tone_of_article_re_candidate,"0") ~ "0"
+                     )) %>%
+  filter(!is.na(tenor_tone_of_article_re_candidate)) %>%
+           group_by(state, contest, candidate_name, candidate_status,
+                    tenor_tone_of_article_re_candidate) %>%
+            summarize(Articles =n()) %>%
+  pivot_wider(names_from = tenor_tone_of_article_re_candidate,
+              names_prefix = "code_",
+              names_sort = TRUE,
+              values_from = Articles) %>%
+  mutate_if(is.numeric, replace_na, 0)
+
+all_tone %>% 
+  datatable(
+          colnames = c('State', 'Contest', 'Canddiate', 'Status', 'Neutral Articles', 'Mostly Positive', 'Mostly Negative', 'Both'),
+        rownames = FALSE)
+  
+
+
+
+```
+
+## **Candidates who received the most negative coverage.**
+
+```{r}
+#| message: false
+#| code-fold: true
+
+all_tone %>%
+    left_join(competitiveness, b = c("state", "contest")) %>%
+  select(3:4,type,contains("code"), 1:2) %>%
+    adorn_percentages(denominator = 'row') %>%
+  filter(code_2 > .05) %>%
+  arrange(desc(code_2) ) %>%
+  adorn_pct_formatting() %>%
+    datatable(list(pageLength = 16),
+          colnames = c('Candidate', 'Cand. Status', 'Compete Type', 'Neutral Articles', 'Mostly Positive', 'Mostly Negative', 'Both', 'State', 'Contest'),
+        rownames = FALSE)
+```
