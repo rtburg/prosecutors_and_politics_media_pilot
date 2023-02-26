@@ -4,7 +4,14 @@
     "href": "coverage_amount.html",
     "title": "Amount of Coverage",
     "section": "",
-    "text": "Rendered at 12:48 PM, Feb. 20, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+    "text": "Rendered at 12:40 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+  },
+  {
+    "objectID": "coverage_amount.html#how-much-coverage-did-each-incumbent-receive",
+    "href": "coverage_amount.html#how-much-coverage-did-each-incumbent-receive",
+    "title": "Amount of Coverage",
+    "section": "How much coverage did each incumbent receive?",
+    "text": "How much coverage did each incumbent receive?\n\n\nCode\narticles_per_prosecutor<- incumbents %>% \n  filter(duplicative_publication_of_previous_article == \"0\" |\n           #Next line because of Devinney had no articles\n           is.na(duplicative_publication_of_previous_article)) %>%\n    mutate(prosecutor_name = case_when(\n    prosecutor_name == \"John J. Flynn\" ~ \"Flynn, John J.\",\n    prosecutor_name == \"Devinney\" ~ \"Devinney, Darrin C.\",\n    TRUE ~ prosecutor_name)\n    \n    ) %>%\n  group_by(state, contest, prosecutor_name) %>%\n  summarize(articles = n()) %>%\n  mutate(articles = case_when(\n    prosecutor_name == \"Devinney\" ~ 0,\n    prosecutor_name != \"Devinney\" ~ as.numeric(articles)\n  )\n  ) %>% \n  arrange(desc(articles))\n\n\ng1 <- articles_per_prosecutor %>% \n  ggplot(aes(x = articles,\n             y=reorder(prosecutor_name, articles), \n             text = paste(\"articles: \",articles)\n             )\n         ) +\n  geom_col(fill=\"#4B9CD3\") +\n    scale_x_continuous(breaks=seq(0,350,50), limits=c(0,350)) +\n\n  geom_vline(aes(xintercept = median(articles)), color=\"#952e46\") +\n  geom_text(aes(x=median(articles), \n                y=2,\n                label= paste0(\"Median mentions per incumbent: \", median(articles))\n                ),\n            color=\"#952e46\",\n            nudge_x = 120, \n            show.legend = FALSE\n            ) +\n  labs(title = \"Incumbent Media Mentions\") + \n  xlab(\"Number of mentions\") +\n  ylab(NULL) +\n  theme_classic() +\n  theme(plot.margin = unit(c(0,0,0,0), \"cm\")) +\n  theme(axis.ticks = element_blank() ) +\n  theme(axis.line.y = element_blank()) +\n  theme(text = element_text(family=\"sans\", \n  size = 9, \n  color = \"#3f2b56\")) +\n  theme(title = element_text(family = \"serif\", size = 16.2))+\n  theme(axis.title.x = element_text(family = \"sans\", size = 12.15)) +\n  theme(axis.text.y = element_text(family = \"sans\", size = 12.15))\n\ng1\n\n\n\n\n\n\n\nCode\ndatatable(articles_per_prosecutor,\n          options = list(dom='t',\n                         pageLength = 27),\n            colnames = c('State', 'Contest', 'Prosecutor', 'Articles'),\n          rownames = FALSE,\n          filter = 'top')"
   },
   {
     "objectID": "coverage_amount.html#how-much-coverage-did-each-non-incumbent-receive",
@@ -28,53 +35,11 @@
     "text": "Median mentions for candidates, by incumbency and competitiveness\n\n\nCode\nnincs_competitive <- nincs_for_binding %>% \n  left_join(competitiveness, by=c(\"state\", \"contest\")) %>%\n  select(state, contest, candidate_status, candidate_name, type) \n\nincs_competitive <- incs_for_binding %>%\n    left_join(competitiveness, by=c(\"state\", \"contest\")) %>%\n  select(state, contest, candidate_name, candidate_status, type)\n\nbind_rows(nincs_competitive, incs_competitive) %>%\n  group_by(state, contest, candidate_name, candidate_status, type) %>%\n  summarize(mentions = n()) %>%\n  as_tibble() %>%\n  group_by(candidate_status, type) %>%\n  summarize(median_mentions = median(mentions)) %>%\n  as_tibble() %>%\n  mutate(candidate_status = case_when(\n    candidate_status == \"challenger\" ~ \"All challengers in a contest\",\n    candidate_status == \"incumbent\" ~ \"Incumbent\"\n  )\n  ) %>% \n    pivot_wider(names_from = type,\n                values_from = median_mentions) %>%\n  \n        replace_na(list(uncontested = 0)) %>% \n    datatable(options = list(dom='t',\n                             order = list(1, 'desc')\n                             ),\n            colnames = c('Candidate Type', 'Contested','Open','Uncontested'),\n          rownames = FALSE)"
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Executive Summary",
-    "section": "",
-    "text": "Rendered at 12:19 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)\nThis analysis accompanies the full report by Carissa Byrne Hessick and Amy Ullrick as part of the the Prosecutors and Politics Project at the UNC School of Law.\nCode for loading the data as well as additional information about the code and data is available on GitHub."
-  },
-  {
-    "objectID": "index.html#how-many-articles-did-we-code",
-    "href": "index.html#how-many-articles-did-we-code",
-    "title": "Executive Summary",
-    "section": "How many articles did we code?",
-    "text": "How many articles did we code?\n\n\nCode\ninc_unique_articles <- incumbents %>% \n  filter(duplicative_publication_of_previous_article == \"0\")\n\nnrow(inc_unique_articles)\n\n\n[1] 1646\n\n\n1,646 articles that mention incumbents that are coded as unique.\n\n\nCode\nninc_unique_articles <- non_incumbents %>% filter(duplicative_publication_of_previous_article == \"0\" & duplicative_of_incumbent_article == \"0\")\n\nnrow(ninc_unique_articles)\n\n\n[1] 328\n\n\n328 articles that mention non-incumbents that are coded as unique.\nWe did not determine whether an article was unique across the whole data set. For example, if an article mentions two different challengers, it would appear in our data twice."
-  },
-  {
-    "objectID": "index.html#what-types-of-articles-did-we-have",
-    "href": "index.html#what-types-of-articles-did-we-have",
-    "title": "Executive Summary",
-    "section": "What types of articles did we have?",
-    "text": "What types of articles did we have?\n1 = news story\n2 = opinion or editorial\n3 = letter to the editor\n4 = advertisement/notification\n99 = other\n\n\nCode\ncombined_unique_articles <- bind_rows(inc_unique_articles, ninc_unique_articles) \n\ncombined_unique_articles %>%\n    tabyl(type_of_article) %>%\n  datatable(options = list(dom='t'),\n            rownames = FALSE,\n            colnames = c('Type', '# of articles', '% of articles')) %>%\n  formatPercentage('percent', 2) %>%\n  formatRound('n', digits = 0)"
-  },
-  {
-    "objectID": "index.html#how-competitive-was-each-contest-we-analyzed",
-    "href": "index.html#how-competitive-was-each-contest-we-analyzed",
-    "title": "Executive Summary",
-    "section": "How competitive was each contest we analyzed?",
-    "text": "How competitive was each contest we analyzed?\nNote: In Lake County, Oregon, there was no incumbent following the resignation of the previous district attorney in 2018. In other contests marked as “open,” the incumbent did not run but did receive news coverage.\n\n\nCode\ncompetitiveness %>%\n  select(state, contest, type, incumbents, non_incumbents) %>% \n  datatable(options = list(dom='t',\n                         pageLength = 27),\n            colnames = c('State', 'Contest', 'Competitiveness', 'Incumbents', 'Challengers'),\n          rownames = FALSE)"
-  },
-  {
-    "objectID": "coverage_amount.html#how-much-coverage-did-each-incumbent-receive",
-    "href": "coverage_amount.html#how-much-coverage-did-each-incumbent-receive",
-    "title": "Amount of Coverage",
-    "section": "How much coverage did each incumbent receive?",
-    "text": "How much coverage did each incumbent receive?\n\n\nCode\narticles_per_prosecutor<- incumbents %>% \n  filter(duplicative_publication_of_previous_article == \"0\" |\n           #Next line because of Devinney had no articles\n           is.na(duplicative_publication_of_previous_article)) %>%\n    mutate(prosecutor_name = case_when(\n    prosecutor_name == \"John J. Flynn\" ~ \"Flynn, John J.\",\n    prosecutor_name == \"Devinney\" ~ \"Devinney, Darrin C.\",\n    TRUE ~ prosecutor_name)\n    \n    ) %>%\n  group_by(state, contest, prosecutor_name) %>%\n  summarize(articles = n()) %>%\n  mutate(articles = case_when(\n    prosecutor_name == \"Devinney\" ~ 0,\n    prosecutor_name != \"Devinney\" ~ as.numeric(articles)\n  )\n  ) %>% \n  arrange(desc(articles))\n\n\ng1 <- articles_per_prosecutor %>% \n  ggplot(aes(x = articles,\n             y=reorder(prosecutor_name, articles), \n             text = paste(\"articles: \",articles)\n             )\n         ) +\n  geom_col(fill=\"#4B9CD3\") +\n    scale_x_continuous(breaks=seq(0,350,50), limits=c(0,350)) +\n\n  geom_vline(aes(xintercept = median(articles)), color=\"#952e46\") +\n  geom_text(aes(x=median(articles), \n                y=2,\n                label= paste0(\"Median mentions per incumbent: \", median(articles))\n                ),\n            color=\"#952e46\",\n            nudge_x = 120, \n            show.legend = FALSE\n            ) +\n  labs(title = \"Incumbent Media Mentions\") + \n  xlab(\"Number of mentions\") +\n  ylab(NULL) +\n  theme_classic() +\n  theme(plot.margin = unit(c(0,0,0,0), \"cm\")) +\n  theme(axis.ticks = element_blank() ) +\n  theme(axis.line.y = element_blank()) +\n  theme(text = element_text(family=\"sans\", \n  size = 9, \n  color = \"#3f2b56\")) +\n  theme(title = element_text(family = \"serif\", size = 16.2))+\n  theme(axis.title.x = element_text(family = \"sans\", size = 12.15)) +\n  theme(axis.text.y = element_text(family = \"sans\", size = 12.15))\n\ng1\n\n\n\n\n\n\n\nCode\ndatatable(articles_per_prosecutor,\n          options = list(dom='t',\n                         pageLength = 27),\n            colnames = c('State', 'Contest', 'Prosecutor', 'Articles'),\n          rownames = FALSE,\n          filter = 'top')"
-  },
-  {
-    "objectID": "index.html#which-state-and-contests-did-we-cover",
-    "href": "index.html#which-state-and-contests-did-we-cover",
-    "title": "Executive Summary",
-    "section": "Which state and contests did we cover?",
-    "text": "Which state and contests did we cover?\n\n\nCode\nall_mentions %>% \n  group_by(state, contest) %>%\n  summarize(mentions=n())  %>% \n  mutate(mentions = case_when(\n    contest == \"Butler\" ~ 0,\n    TRUE ~ as.numeric(mentions))\n    ) %>%\n  datatable(options = list(dom='t',\n                         pageLength = 27),\n            colnames = c('State', 'Contest', 'Mentions'),\n          rownames = FALSE)"
-  },
-  {
     "objectID": "coverage_content.html",
     "href": "coverage_content.html",
     "title": "Content of Coverage",
     "section": "",
-    "text": "Rendered at 06:39 PM, Feb. 21, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+    "text": "Rendered at 12:40 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
   },
   {
     "objectID": "coverage_content.html#depth-of-mention-for-incumbents",
@@ -147,18 +112,11 @@
     "text": "Mentions of Background or Platforms of Non-Incumbents\n\n\nCode\nnon_incumbents %>%\n    filter(duplicative_publication_of_previous_article == \"0\") %>%\n  group_by(candidate_name, candidate_background_or_platform) %>%\n  summarize(articles = n()) %>%\n  mutate(candidate_background_or_platform = case_when(\n    candidate_background_or_platform == \"0\" ~ \"neither\",\n    candidate_background_or_platform == \"1\" ~ \"background_only\",\n    candidate_background_or_platform == \"2\" ~ \"platform_only\",\n    candidate_background_or_platform == \"3\" ~ \"both\")) %>%\n  pivot_wider(names_from = candidate_background_or_platform, values_from = articles) %>%\n   replace_na(list(neither = 0,\n                   platform_only = 0,\n                   background_only = 0,\n                   both = 0\n   )\n   ) %>%\n  adorn_percentages() %>%\n  arrange(desc(neither)) %>%\n  adorn_pct_formatting() %>%\n  datatable(\n            options(list(dom='t',\n                         pageLength = 21)),\n               colnames = c('Candidate',\n                            'Neither',\n                            'Platform',\n                            'Background',\n                            'Both'),\n               rownames = FALSE)"
   },
   {
-    "objectID": "index.html#which-states-and-contests-did-we-cover",
-    "href": "index.html#which-states-and-contests-did-we-cover",
-    "title": "Executive Summary",
-    "section": "Which states and contests did we cover?",
-    "text": "Which states and contests did we cover?\n\n\nCode\nall_mentions %>% \n  group_by(state, contest) %>%\n  summarize(mentions=n())  %>% \n  mutate(mentions = case_when(\n    contest == \"Butler\" ~ 0,\n    TRUE ~ as.numeric(mentions))\n    ) %>%\n  datatable(options = list(dom='t',\n                         pageLength = 27),\n            colnames = c('State', 'Contest', 'Mentions'),\n          rownames = FALSE)"
-  },
-  {
     "objectID": "coverage_tone.html",
     "href": "coverage_tone.html",
     "title": "Tone of Coverage",
     "section": "",
-    "text": "Rendered at 12:03 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+    "text": "Rendered at 12:40 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
   },
   {
     "objectID": "coverage_tone.html#overall-most-media-coverage-was-neutral.",
@@ -187,5 +145,40 @@
     "title": "Tone of Coverage",
     "section": "Candidates who received the most negative coverage.",
     "text": "Candidates who received the most negative coverage.\n\n\nCode\nall_tone %>%\n    left_join(competitiveness, b = c(\"state\", \"contest\")) %>%\n  select(3:4,type,contains(\"code\"), 1:2) %>%\n    adorn_percentages(denominator = 'row') %>%\n  filter(code_2 > .05) %>%\n  arrange(desc(code_2) ) %>%\n  adorn_pct_formatting() %>%\n    datatable(list(pageLength = 16),\n          colnames = c('Candidate', 'Cand. Status', 'Compete Type', 'Neutral Articles', 'Mostly Positive', 'Mostly Negative', 'Both', 'State', 'Contest'),\n        rownames = FALSE)"
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Executive Summary",
+    "section": "",
+    "text": "Rendered at 12:40 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)\nThis analysis accompanies the full report by Carissa Byrne Hessick and Amy Ullrick as part of the the Prosecutors and Politics Project at the UNC School of Law.\nCode for loading the data as well as additional information about the code and data is available on GitHub."
+  },
+  {
+    "objectID": "index.html#which-states-and-contests-did-we-cover",
+    "href": "index.html#which-states-and-contests-did-we-cover",
+    "title": "Executive Summary",
+    "section": "Which states and contests did we cover?",
+    "text": "Which states and contests did we cover?\n\n\nCode\nall_mentions %>% \n  group_by(state, contest) %>%\n  summarize(mentions=n())  %>% \n  mutate(mentions = case_when(\n    contest == \"Butler\" ~ 0,\n    TRUE ~ as.numeric(mentions))\n    ) %>%\n  datatable(options = list(dom='t',\n                         pageLength = 27),\n            colnames = c('State', 'Contest', 'Mentions'),\n          rownames = FALSE)"
+  },
+  {
+    "objectID": "index.html#how-many-articles-did-we-code",
+    "href": "index.html#how-many-articles-did-we-code",
+    "title": "Executive Summary",
+    "section": "How many articles did we code?",
+    "text": "How many articles did we code?\n\n\nCode\ninc_unique_articles <- incumbents %>% \n  filter(duplicative_publication_of_previous_article == \"0\")\n\nnrow(inc_unique_articles)\n\n\n[1] 1646\n\n\n1,646 articles that mention incumbents that are coded as unique.\n\n\nCode\nninc_unique_articles <- non_incumbents %>% filter(duplicative_publication_of_previous_article == \"0\" & duplicative_of_incumbent_article == \"0\")\n\nnrow(ninc_unique_articles)\n\n\n[1] 328\n\n\n328 articles that mention non-incumbents that are coded as unique.\nWe did not determine whether an article was unique across the whole data set. For example, if an article mentions two different challengers, it would appear in our data twice."
+  },
+  {
+    "objectID": "index.html#what-types-of-articles-did-we-have",
+    "href": "index.html#what-types-of-articles-did-we-have",
+    "title": "Executive Summary",
+    "section": "What types of articles did we have?",
+    "text": "What types of articles did we have?\n1 = news story\n2 = opinion or editorial\n3 = letter to the editor\n4 = advertisement/notification\n99 = other\n\n\nCode\ncombined_unique_articles <- bind_rows(inc_unique_articles, ninc_unique_articles) \n\ncombined_unique_articles %>%\n    tabyl(type_of_article) %>%\n  datatable(options = list(dom='t'),\n            rownames = FALSE,\n            colnames = c('Type', '# of articles', '% of articles')) %>%\n  formatPercentage('percent', 2) %>%\n  formatRound('n', digits = 0)"
+  },
+  {
+    "objectID": "index.html#how-competitive-was-each-contest-we-analyzed",
+    "href": "index.html#how-competitive-was-each-contest-we-analyzed",
+    "title": "Executive Summary",
+    "section": "How competitive was each contest we analyzed?",
+    "text": "How competitive was each contest we analyzed?\nNote: In Lake County, Oregon, there was no incumbent following the resignation of the previous district attorney in 2018. In other contests marked as “open,” the incumbent did not run but did receive news coverage.\n\n\nCode\ncompetitiveness %>%\n  select(state, contest, type, incumbents, non_incumbents) %>% \n  datatable(options = list(dom='t',\n                         pageLength = 27),\n            colnames = c('State', 'Contest', 'Competitiveness', 'Incumbents', 'Challengers'),\n          rownames = FALSE)"
   }
 ]
