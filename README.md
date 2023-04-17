@@ -1,4 +1,4 @@
-Media Coverage of Prosecutors and Their Elections: Results of a Pilot Study ================
+# Media Coverage of Prosecutors and Their Elections: Results of a Pilot Study
 
 Part of the the [Prosecutors and Politics Project](https://law.unc.edu/academics/centers-and-programs/prosecutors-and-politics-project/) at the [UNC School of Law](https://law.unc.edu/)
 
