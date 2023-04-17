@@ -26,7 +26,7 @@ Full report: <https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.2
 
 ### Staff involved
 
-Questions about this report should be directed to the PPP director, Professor Carissa Byrne Hessick at [chessick\@email.unc.edu](mailto:chessick@email.unc.edu.
+Questions about this report should be directed to the PPP director, Professor Carissa Byrne Hessick at [chessick\@email.unc.edu](mailto:chessick@email.unc.edu).
 
 Associate Professor Ryan Thornburg, UNC School of Journalism and Media, played a key role in research design. He also performed the data analysis and wrote portions of the report.
 
