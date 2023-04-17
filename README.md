@@ -10,7 +10,7 @@ Part of the the [Prosecutors and Politics Project](https://law.unc.edu/academics
 
 Full report: <https://law.unc.edu/wp-content/uploads/2023/02/REPORT-FINAL-2.15.23.pdf>
 
-*Code and repository by Ryan Thornburg ([ryan.thornburg\@unc.edu](mailto:ryan.thornburg@unc.edu){.email})*
+*Code and repository by Ryan Thornburg ([ryan.thornburg\@unc.edu](mailto:ryan.thornburg@unc.edu))*
 
 ## Project goal
 
