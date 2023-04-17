@@ -7,6 +7,7 @@ project:
 
 website:
   title: "Media Coverage of Prosecutors and Their Elections: Results of a Pilot Study"
+  google-analytics: "G-JC8T8H7NJ2"
   page-footer: "Copyright 2023, Ryan Thornburg"
   repo-url: https://github.com/rtburg/prosecutors_and_politics_media_pilot/
   repo-actions: [issue]

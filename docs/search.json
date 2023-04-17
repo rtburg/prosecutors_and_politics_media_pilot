@@ -4,7 +4,7 @@
     "href": "coverage_amount.html",
     "title": "Amount of Coverage",
     "section": "",
-    "text": "Rendered at 12:40 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+    "text": "Rendered at 10:38 AM, Apr. 17, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
   },
   {
     "objectID": "coverage_amount.html#how-much-coverage-did-each-incumbent-receive",
@@ -39,7 +39,7 @@
     "href": "coverage_content.html",
     "title": "Content of Coverage",
     "section": "",
-    "text": "Rendered at 12:40 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+    "text": "Rendered at 10:38 AM, Apr. 17, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
   },
   {
     "objectID": "coverage_content.html#depth-of-mention-for-incumbents",
@@ -81,7 +81,7 @@
     "href": "coverage_content.html#tone-of-crime-rate-coverage",
     "title": "Content of Coverage",
     "section": "Tone of Crime Rate Coverage",
-    "text": "Tone of Crime Rate Coverage\n0 = neutral\n1 = expressing concern\n2 = reassuring\n3 = includes both expressions of concern and reassurance\n99 = not applicable\nNote: Omits four articles with invalid codes for tone of coverage.\n\n\n# A tibble: 4 × 23\n  news_sto…¹ prose…² date_of_article     title…³ name_…⁴ name_…⁵ type_…⁶ dupli…⁷\n  <chr>      <chr>   <dttm>              <chr>   <chr>   <chr>   <chr>   <chr>  \n1 9          \"Adel,… 2020-01-31 00:00:00 No cri… 3 KTVK… Burkit… 1       0      \n2 72         \"Adel,… 2020-02-01 00:00:00 No cha… The Ar… <NA>    1       0      \n3 510        \"John … 2020-02-15 00:00:00 Modify… Buffal… News E… 2       0      \n4 1          \"Wojta… 2020-01-05 00:00:00 Wojtas… Niagar… Pfeiff… 1       0      \n# … with 15 more variables: x_subj_duplicate_only <chr>,\n#   length_of_article <chr>, primary_focus_of_article <chr>,\n#   election_referenced_in_article <chr>, type_of_prosecutor_mention <chr>,\n#   type_of_crime_discussed <chr>, discussion_of_crime_rates <chr>,\n#   discussion_of_prosecutorial_decision_or_policy <chr>,\n#   tenor_tone_of_article_re_prosecutor <chr>,\n#   tenor_tone_of_article_re_crime_or_crime_rates <chr>, notes <chr>, …\n\n\n\n\nCode\ninc_unique_articles %>%\n  filter(tenor_tone_of_article_re_crime_or_crime_rates %in% c(\"0\",\"1\",\"2\",\"3\",\"99\")) %>%\n  tabyl(discussion_of_crime_rates\n    ,tenor_tone_of_article_re_crime_or_crime_rates)%>%\n       datatable(options = list(dom='t'),\n               colnames = c('', 'Neutral','Concern','Reassuring', 'Both','NA'),\n               rownames = FALSE)"
+    "text": "Tone of Crime Rate Coverage\n0 = neutral\n1 = expressing concern\n2 = reassuring\n3 = includes both expressions of concern and reassurance\n99 = not applicable\nNote: Omits four articles with invalid codes for tone of coverage.\n\n\n# A tibble: 4 × 23\n  news_story_number prosecutor_name         date_of_article     title_of_article\n  <chr>             <chr>                   <dttm>              <chr>           \n1 9                 \"Adel, Allister\"        2020-01-31 00:00:00 No criminal cha…\n2 72                \"Adel, Allister\"        2020-02-01 00:00:00 No charges for …\n3 510               \"John J. Flynn\"         2020-02-15 00:00:00 Modify bail ref…\n4 1                 \"Wojtaszek, Caroline \\… 2020-01-05 00:00:00 Wojtaszek gets …\n# ℹ 19 more variables: name_of_publication <chr>, name_of_author <chr>,\n#   type_of_article <chr>, duplicative_publication_of_previous_article <chr>,\n#   x_subj_duplicate_only <chr>, length_of_article <chr>,\n#   primary_focus_of_article <chr>, election_referenced_in_article <chr>,\n#   type_of_prosecutor_mention <chr>, type_of_crime_discussed <chr>,\n#   discussion_of_crime_rates <chr>,\n#   discussion_of_prosecutorial_decision_or_policy <chr>, …\n\n\n\n\nCode\ninc_unique_articles %>%\n  filter(tenor_tone_of_article_re_crime_or_crime_rates %in% c(\"0\",\"1\",\"2\",\"3\",\"99\")) %>%\n  tabyl(discussion_of_crime_rates\n    ,tenor_tone_of_article_re_crime_or_crime_rates)%>%\n       datatable(options = list(dom='t'),\n               colnames = c('', 'Neutral','Concern','Reassuring', 'Both','NA'),\n               rownames = FALSE)"
   },
   {
     "objectID": "coverage_content.html#mention-of-election",
@@ -116,7 +116,7 @@
     "href": "coverage_tone.html",
     "title": "Tone of Coverage",
     "section": "",
-    "text": "Rendered at 12:40 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
+    "text": "Rendered at 10:38 AM, Apr. 17, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)"
   },
   {
     "objectID": "coverage_tone.html#overall-most-media-coverage-was-neutral.",
@@ -151,7 +151,7 @@
     "href": "index.html",
     "title": "Executive Summary",
     "section": "",
-    "text": "Rendered at 12:40 PM, Feb. 26, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)\nThis analysis accompanies the full report by Carissa Byrne Hessick and Amy Ullrick as part of the the Prosecutors and Politics Project at the UNC School of Law.\nCode for loading the data as well as additional information about the code and data is available on GitHub."
+    "text": "Rendered at 10:38 AM, Apr. 17, 2023\nRyan Thornburg (ryan.thornburg@unc.edu)\nThis analysis accompanies the full report by Carissa Byrne Hessick and Amy Ullrick as part of the the Prosecutors and Politics Project at the UNC School of Law.\nCode for loading the data as well as additional information about the code and data is available on GitHub."
   },
   {
     "objectID": "index.html#which-states-and-contests-did-we-cover",
